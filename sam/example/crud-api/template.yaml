@@ -1,0 +1,88 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: crud-api
+
+Parameters:
+  DYNAMOENDPOINT:
+    Type: String
+  TABLE:
+    Type: String
+  ACAH:
+    Type: String
+  ACAO:
+    Type: String
+
+Globals:
+  Function:
+    Timeout: 3
+    Environment:
+      Variables:
+        DYNAMO_ENDPOINT: !Ref DYNAMOENDPOINT
+        TABLE: !Ref TABLE
+        ACAH: !Ref ACAH
+        ACAO: !Ref ACAO
+  Api:
+    Cors:
+      AllowMethods: "'OPTIONS,GET,POST'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
+    #Auth:
+    #  ResourcePolicy:
+    #    CustomStatements:
+    #    - Effect: Allow
+    #      Principal: "*"
+    #      Action: execute-api:Invoke
+    #      Resource: "*"
+    #      Condition:
+    #        IpAddress:
+    #          aws:SourceIp: "xxx.xxx.xxx.xxx"
+
+Resources:
+  CreateInfoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: info/create
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Policies:
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+      Architectures:
+        - x86_64
+      Events:
+        CreateInfoF:
+          Type: Api
+          Properties:
+            Path: /info
+            Method: post
+            
+  ReadInfoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: info/read
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Policies:
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+      Architectures:
+        - x86_64
+      Events:
+        ReadInfo:
+          Type: Api
+          Properties:
+            Path: /info
+            Method: get
+
+  DeleteInfoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: info/delete
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Events:
+        DeleteInfo:
+          Type: Api
+          Properties:
+            Path: /info/delete
+            Method: post
