@@ -1,4 +1,4 @@
-# m-analysis-infrastructure
+# ses-lambda-pipline
 
 ## What is this ?
 
