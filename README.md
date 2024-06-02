@@ -1,4 +1,4 @@
-# ses-lambda-pipline
+# lambda-ses_pipeline
 
 ## What is this ?
 
